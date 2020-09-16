@@ -46,6 +46,9 @@ class CrontabModuleController extends ActionController
         return $this->view->render();
     }
 
+    /**
+     * @param string $identifier
+     */
     public function toggleScheduleAction(string $identifier): void
     {
         $taskDefinition = $this->taskRepository->findByIdentifier($identifier);
@@ -58,6 +61,9 @@ class CrontabModuleController extends ActionController
         $this->redirect('list');
     }
 
+    /**
+     * @param array $identifier
+     */
     public function scheduleForImmediateExecutionAction(array $identifiers): void
     {
         foreach ($identifiers as $identifier) {
@@ -69,6 +75,9 @@ class CrontabModuleController extends ActionController
         $this->redirect('list');
     }
 
+    /**
+     * @param string $identifier
+     */
     public function terminateAction(string $identifier): void
     {
         $this->processManager->terminateAllProcesses($identifier);
