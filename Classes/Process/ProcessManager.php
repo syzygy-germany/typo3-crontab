@@ -9,6 +9,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ProcessManager implements LoggerAwareInterface
@@ -42,6 +43,10 @@ class ProcessManager implements LoggerAwareInterface
         $this->forks = $forks;
         $this->processes = new \SplObjectStorage();
         $this->databaseConnection = $databaseConnection ?? GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable(self::runningTable);
+
+        if ($this->logger === null || version_compare(TYPO3_branch, '9.0', '<')) {
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        }
     }
 
     public function add(TaskProcess $subProcess): void
