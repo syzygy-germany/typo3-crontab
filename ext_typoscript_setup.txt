@@ -1,0 +1,22 @@
+module.tx_crontab {
+    view {
+        templateRootPaths {
+            10 = EXT:crontab/Resources/Private/Templates/
+            20 = EXT:crontab/Resources/Private/Compatibility_8_7/Templates/
+        }
+
+        partialRootPaths {
+            10 = EXT:crontab/Resources/Private/Partials/
+            20 = EXT:crontab/Resources/Private/Compatibility_8_7/Partials/
+        }
+
+        layoutRootPaths {
+            10 = EXT:crontab/Resources/Private/Layouts/
+            20 = EXT:crontab/Resources/Private/Compatibility_8_7/Layouts/
+        }
+    }
+}
+
+[compatVersion = 9.5]
+    module.tx_crontab >
+[END]

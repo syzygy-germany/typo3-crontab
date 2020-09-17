@@ -1,0 +1,39 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	data-namespace-typo3-fluid="true">
+<f:be.container>
+	<f:be.pageRenderer
+		includeRequireJsModules="{
+			0:'TYPO3/CMS/Crontab/Scheduler',
+			1:'TYPO3/CMS/Backend/DateTimePicker',
+			2:'TYPO3/CMS/Scheduler/PageBrowser',
+			2:'TYPO3/CMS/Scheduler/Scheduler',
+			3:'TYPO3/CMS/Backend/Tooltip',
+			4:'TYPO3/CMS/Backend/Modal'
+		}"
+	/>
+
+    <div class="module">
+        <div class="module-docheader">
+
+            <div class="module-docheader-bar module-docheader-bar-buttons t3js-module-docheader-bar t3js-module-docheader-bar-buttons">
+                <div class="module-docheader-bar-column-right">
+                    <div class="btn-toolbar" role="toolbar" aria-label="">
+                        <div class="btn btn-default btn-sm">
+                            <f:be.buttons.shortcut />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="typo3-docbody">
+            <div id="typo3-inner-docbody">
+                <f:be:moduleLayout.button.shortcutButton displayName="{f:translate(id: shortcutLabel)}" />
+
+                <f:render section="Content" />
+                <f:render partial="ServerTime" arguments="{now: now}" />
+            </div>
+        </div>
+    </div>
+</f:be.container>
+</html>
