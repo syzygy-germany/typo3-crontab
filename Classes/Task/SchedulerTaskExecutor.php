@@ -60,7 +60,7 @@ class SchedulerTaskExecutor implements TaskExecutor
     private function createTask(array $options): AbstractTask
     {
         if (empty($options['className'])) {
-            return null;
+            throw new ConfigurationValidationFailed('No "className" has been configured, which is mandatory for this command.', 1601021847);
         }
         $className = $options['className'];
         if (empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][$className])) {
