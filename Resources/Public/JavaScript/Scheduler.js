@@ -108,6 +108,35 @@ define(['jquery',
     return false;
   };
 
+  Scheduler.checkPhpProcessesViaAjax = function() {
+      if ($('.tx_scheduler_mod1').data('validate-status-via-ajax') !== 1) {
+          return;
+      }
+
+      var taskIdentifiers = [];
+      $('.tx_crontab_task_identifier').each(function () {
+          taskIdentifiers.push($(this).val());
+      });
+
+      $.ajax({
+          url: TYPO3.settings.ajaxUrls['has_running_processes'],
+          type: 'POST',
+          data: {
+              'identifiers': taskIdentifiers
+          },
+          success: function(response) {
+              $.each(response, function(identifier, status) {
+                  var idPrefix = 'running_task_';
+                  if (status === true) {
+                      $('#' + idPrefix + identifier).removeClass('hidden');
+                  } else {
+                      $('#' + idPrefix + identifier).addClass('hidden');
+                  }
+              });
+          }
+      });
+  };
+
   /**
    * Toggle the relevant form fields by task type
    *
@@ -161,6 +190,8 @@ define(['jquery',
       "paging": false,
       "searching": false
     });
+
+    Scheduler.checkPhpProcessesViaAjax();
   };
 
   /**

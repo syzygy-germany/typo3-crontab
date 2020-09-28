@@ -5,6 +5,8 @@ namespace Helhum\TYPO3\Crontab\Controller;
 use Helhum\TYPO3\Crontab\Crontab;
 use Helhum\TYPO3\Crontab\Process\ProcessManager;
 use Helhum\TYPO3\Crontab\Repository\TaskRepository;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -25,12 +27,12 @@ class CrontabModuleController extends ActionController
      */
     private $processManager;
 
-    public function __construct(TaskRepository $taskRepository, Crontab $crontab, ProcessManager $processManager = null)
+    public function __construct(?TaskRepository $taskRepository = null, ?Crontab $crontab = null, ProcessManager $processManager = null)
     {
-        $this->taskRepository = $taskRepository;
-        $this->crontab = $crontab;
-        $this->processManager = $processManager ?? GeneralUtility::makeInstance(ProcessManager::class, 1);
         parent::__construct();
+        $this->taskRepository = $taskRepository ?? GeneralUtility::makeInstance(TaskRepository::class);
+        $this->crontab = $crontab ?? GeneralUtility::makeInstance(Crontab::class);
+        $this->processManager = $processManager ?? GeneralUtility::makeInstance(ProcessManager::class, 1);
     }
 
     public function listAction(): string
@@ -41,6 +43,7 @@ class CrontabModuleController extends ActionController
             'processManager' => $this->processManager,
             'shortcutLabel' => 'crontab',
             'now' => new \DateTimeImmutable(),
+            'validateStatusViaAjax' => (int) $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['crontab']['validateStatusViaAjax']
         ]);
 
         return $this->view->render();
@@ -84,5 +87,23 @@ class CrontabModuleController extends ActionController
         $this->addFlashMessage(sprintf('Terminated processes for task "%s"', $identifier));
 
         $this->redirect('list');
+    }
+
+    public function hasRunningProcesses(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $parsedBody = $request->getParsedBody();
+
+        if (! isset($parsedBody['identifiers'])) {
+            $response->getBody()->write('');
+            return $response;
+        }
+
+        $hasRunningProcesses = [];
+        foreach($parsedBody['identifiers'] as $identifier) {
+            $hasRunningProcesses[$identifier] = $this->processManager->hasRunningProcesses($identifier);
+        }
+
+        $response->getBody()->write(json_encode($hasRunningProcesses));
+        return $response;
     }
 }

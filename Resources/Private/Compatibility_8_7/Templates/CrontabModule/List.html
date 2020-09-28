@@ -8,7 +8,7 @@
 
 <f:section name="Content">
 	<h1><f:translate key="crontab"/></h1>
-	<div class="tx_scheduler_mod1">
+	<div class="tx_scheduler_mod1" data-validate-status-via-ajax="{validateStatusViaAjax}">
 	<f:if condition="{groupedTasks}">
 		<f:else><f:be.infobox state="-1" message="{f:translate(key: 'msg.noTasks')}" /></f:else>
 		<f:then>
@@ -42,7 +42,7 @@
 									<tr class="taskGroup_{groupIterator.index}">
 										<td>
 											<span class="t-span"><label class="btn btn-default btn-checkbox">
-												<f:form.checkbox name="identifiers[]" value="{task.identifier}" id="task_{task.identifier}"/><span class="t3-icon fa"></span>
+												<f:form.checkbox class="tx_crontab_task_identifier" name="identifiers[]" value="{task.identifier}" id="task_{task.identifier}"/><span class="t3-icon fa"></span>
 											</label></span>
 										</td>
 										<td class="right"><span class="t-span">{task.identifier}</span></td>
@@ -57,10 +57,14 @@
 												<f:if condition="!{willRun} && !{isScheduled} && !{isRunning}">
 													<span data-toggle="tooltip" data-container="body" data-placement="auto" class="label label-default pull-right"><f:translate key="status.disabled"/></span>
 												</f:if>
-												<f:if condition="{isRunning}">
+
+												<f:if condition="{isRunning} && !{validateStatusViaAjax}">
 													<span data-toggle="tooltip" data-container="body" data-placement="auto" class="label label-danger pull-right"><f:translate key="status.running"/></span>
 												</f:if>
 
+                                                <f:if condition="{validateStatusViaAjax}">
+                                                    <span id="running_task_{task.identifier}" data-toggle="tooltip" data-container="body" data-placement="auto" class="label label-danger pull-right hidden"><f:translate key="status.running"/></span>
+                                                </f:if>
 
                                                 <span class="name">
 														{task.title}
