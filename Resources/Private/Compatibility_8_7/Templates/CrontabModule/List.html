@@ -46,7 +46,7 @@
 											</label></span>
 										</td>
 										<td class="right"><span class="t-span">{task.identifier}</span></td>
-										<td class="nowrap-disabled">
+										<td style="white-space: normal;">
 											<span class="t-span">
 												<f:if condition="{c:expression(expr: '!isRunning && isScheduled && crontab.nextExecution(task) < now')}">
 													<span data-toggle="tooltip" data-container="body" data-placement="auto" class="label label-warning pull-right" title="{f:translate(key: 'status.late.description')}"><f:translate key="status.late"/></span>
