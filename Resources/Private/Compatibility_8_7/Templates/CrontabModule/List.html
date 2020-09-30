@@ -107,7 +107,7 @@
 											</f:if>
 										</span></td>
 										<td class="nowrap">
-											<span class="t-span">
+											<span id="button_group_{task.identifier}" class="t-span">
 												<div class="btn-group" role="group">
 
                                                     <f:comment>
@@ -132,7 +132,7 @@
 															</f:else>
 														</f:if>
 													</a>
-													<f:if condition="{isRunning}">
+													<f:if condition="{isRunning} && !{validateStatusViaAjax}">
 														<f:then>
 															<span class="btn btn-default disabled">
 																<core:icon identifier="empty-empty"/>
@@ -149,7 +149,7 @@
 													</f:if>
 												</div>
 												<div class="btn-group" role="group">
-													<f:if condition="{isRunning}">
+													<f:if condition="{isRunning} && !{validateStatusViaAjax}">
 														<f:then>
 															<div class="btn-group" role="group">
 																<a

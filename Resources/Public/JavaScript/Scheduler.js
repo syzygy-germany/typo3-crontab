@@ -126,11 +126,14 @@ define(['jquery',
           },
           success: function(response) {
               $.each(response, function(identifier, status) {
-                  var idPrefix = 'running_task_';
+                  var idPrefixRunningTask = 'running_task_';
+                  var idPrefixButtonGroup = 'button_group_';
                   if (status === true) {
-                      $('#' + idPrefix + identifier).removeClass('hidden');
+                      $('#' + idPrefixRunningTask + identifier).removeClass('hidden');
+                      $('#' + idPrefixButtonGroup + identifier).addClass('hidden');
                   } else {
-                      $('#' + idPrefix + identifier).addClass('hidden');
+                      $('#' + idPrefixRunningTask + identifier).addClass('hidden');
+                      $('#' + idPrefixButtonGroup + identifier).removeClass('hidden');
                   }
               });
           }
