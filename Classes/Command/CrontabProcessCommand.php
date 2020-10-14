@@ -9,11 +9,20 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CrontabProcessCommand extends Command implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
+    public function __construct(string $name = null)
+    {
+        parent::__construct($name);
+        if ($this->logger === null || version_compare(TYPO3_branch, '9.0', '<')) {
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        }
+    }
 
     public function configure(): void
     {
